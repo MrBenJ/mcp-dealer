@@ -81,6 +81,7 @@ function handle(req: JsonRpcRequest): void {
       id: req.id ?? null,
       result: {
         content: [{ type: 'text', text: `echo: ${JSON.stringify(params.arguments ?? {})}` }],
+        arguments: params.arguments ?? {},
       },
     });
     return;
