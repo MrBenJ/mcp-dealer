@@ -25,8 +25,8 @@ export async function writeConfig(path: string, config: RawConfig): Promise<void
   await mkdir(dirname(path), { recursive: true });
   const tmp = path + '.tmp';
   const body = JSON.stringify(config, null, 2);
-  await writeFile(tmp, body, 'utf-8');
   try {
+    await writeFile(tmp, body, 'utf-8');
     await rename(tmp, path);
   } catch (err) {
     await unlink(tmp).catch(() => {});
