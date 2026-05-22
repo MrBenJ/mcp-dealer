@@ -1,0 +1,39 @@
+{
+  "name": "mcp-dealer",
+  "version": "0.1.0",
+  "description": "A broker MCP server that proxies on-demand to a fleet of MCP servers, plus a localhost web UI for managing them.",
+  "type": "module",
+  "bin": {
+    "mcp-dealer": "./dist/cli/index.js"
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && npm run build:ui",
+    "build:ui": "vite build -c src/ui/frontend/vite.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "dev:broker": "tsx src/cli/index.ts",
+    "dev:ui": "tsx src/cli/index.ts ui"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "hono": "^4.6.0",
+    "@hono/node-server": "^1.13.0",
+    "mime-types": "^2.1.35"
+  },
+  "devDependencies": {
+    "@types/mime-types": "^2.1.4",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vite": "^5.4.0",
+    "vitest": "^2.1.0"
+  },
+  "engines": { "node": ">=20" }
+}
