@@ -1,6 +1,6 @@
 import { serve } from '@hono/node-server';
 import { createApp } from './routes.js';
-import { join, dirname } from 'node:path';
+import { join, dirname, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync, readFileSync } from 'node:fs';
 import { contentType } from 'mime-types';
@@ -17,6 +17,10 @@ function attachStatic(app: ReturnType<typeof createApp>): void {
     const pathname = url.pathname === '/' ? '/index.html' : url.pathname;
     if (pathname.startsWith('/api')) return c.notFound();
     const filePath = join(FRONTEND_DIST, pathname);
+    const rel = relative(FRONTEND_DIST, filePath);
+    if (rel.startsWith('..') || isAbsolute(rel)) {
+      return c.notFound();
+    }
     if (!existsSync(filePath)) {
       const indexPath = join(FRONTEND_DIST, 'index.html');
       if (existsSync(indexPath)) {
