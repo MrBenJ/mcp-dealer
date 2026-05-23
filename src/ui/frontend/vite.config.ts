@@ -8,6 +8,6 @@ const root = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   root,
   plugins: [react()],
-  build: { outDir: 'dist', emptyOutDir: true },
+  build: { outDir: '../../../dist/ui/frontend/dist', emptyOutDir: true },
   server: { proxy: { '/api': 'http://127.0.0.1:7411' } },
 });

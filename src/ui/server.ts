@@ -3,7 +3,7 @@ import { createApp } from './routes.js';
 import { join, dirname, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync, readFileSync } from 'node:fs';
-import { contentType } from 'mime-types';
+import { contentType, lookup } from 'mime-types';
 
 interface StartOptions { configPath: string; port: number }
 
@@ -29,8 +29,9 @@ function attachStatic(app: ReturnType<typeof createApp>): void {
       return c.notFound();
     }
     const body = readFileSync(filePath);
-    const ct = contentType(filePath) || 'application/octet-stream';
-    return c.body(body, 200, { 'content-type': ct.toString() });
+    const mime = lookup(filePath);
+    const ct = mime ? contentType(mime) : false;
+    return c.body(body, 200, { 'content-type': (ct || 'application/octet-stream').toString() });
   });
 }
 

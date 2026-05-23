@@ -9,7 +9,8 @@ async function main() {
   if (args[0] === 'ui') {
     const portArgIdx = args.indexOf('--port');
     const portFromArg = portArgIdx >= 0 ? Number(args[portArgIdx + 1]) : undefined;
-    const port = portFromArg ?? Number(process.env.MCP_DEALER_UI_PORT) ?? 7411;
+    const portFromEnv = process.env.MCP_DEALER_UI_PORT ? Number(process.env.MCP_DEALER_UI_PORT) : undefined;
+    const port = portFromArg ?? portFromEnv ?? 7411;
     const { startUi } = await import('../ui/server.js');
     startUi({ configPath, port });
     return;
