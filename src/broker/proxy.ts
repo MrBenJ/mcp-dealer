@@ -1,7 +1,7 @@
 import * as readline from 'node:readline';
 import type { ChildProcessByStdio } from 'node:child_process';
 import type { Writable, Readable } from 'node:stream';
-import { childCrashed, invokeTimeout, DealerError } from './errors.js';
+import { childCrashed, invokeTimeout, invokeError, DealerError } from './errors.js';
 import type { ToolSchema } from '../shared/config-types.js';
 
 interface PendingRequest {
@@ -114,7 +114,7 @@ export class Proxy {
     this.pending.delete(msg.id);
     if (pending.timer) clearTimeout(pending.timer);
     if (msg.error) {
-      pending.reject(new DealerError('child_crashed', msg.error.message, { mcp_error: msg.error }));
+      pending.reject(invokeError(msg.error));
       return;
     }
     pending.resolve(msg.result);

@@ -5,6 +5,7 @@ import {
   spawnFailed,
   invokeTimeout,
   childCrashed,
+  invokeError,
   configError,
   envUnresolved,
   DealerError,
@@ -60,5 +61,12 @@ describe('error builders', () => {
     const err = envUnresolved('GITHUB_TOKEN', 'github');
     expect(err.data.var_name).toBe('GITHUB_TOKEN');
     expect(err.data.server).toBe('github');
+  });
+
+  it('invokeError wraps an upstream MCP error', () => {
+    const err = invokeError({ message: 'tool not found', code: -32601 });
+    expect(err.code).toBe('invoke_error');
+    expect(err.message).toBe('tool not found');
+    expect((err.data.mcp_error as { code: number }).code).toBe(-32601);
   });
 });

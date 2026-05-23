@@ -6,6 +6,7 @@ export type DealerErrorCode =
   | 'spawn_failed'
   | 'timeout'
   | 'child_crashed'
+  | 'invoke_error'
   | 'config_error'
   | 'env_unresolved';
 
@@ -62,6 +63,10 @@ export function configError(path: string, parseError: string): DealerError {
     path,
     parse_error: parseError,
   });
+}
+
+export function invokeError(mcpError: { message: string; code?: number; data?: unknown }): DealerError {
+  return new DealerError('invoke_error', mcpError.message, { mcp_error: mcpError });
 }
 
 export function envUnresolved(varName: string, server: string): DealerError {
