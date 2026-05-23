@@ -13,6 +13,12 @@ export function EnvHelper({ config }: Props) {
     }
   }
   if (referenced.size === 0) return null;
+
+  async function copyExports() {
+    const text = [...referenced].map((v) => `export ${v}=...`).join('\n');
+    try { await navigator.clipboard.writeText(text); } catch { /* clipboard API may be unavailable; user can still read the list */ }
+  }
+
   return (
     <div className="warn">
       <strong>Env var references in config:</strong>
@@ -20,10 +26,10 @@ export function EnvHelper({ config }: Props) {
         {[...referenced].map((v) => (
           <li key={v}>
             <code>{v}</code> — make sure it&apos;s set in your shell before launching Claude Code.
-            Example: <code>export {v}=...</code>
           </li>
         ))}
       </ul>
+      <button onClick={copyExports}>Copy export commands</button>
     </div>
   );
 }
