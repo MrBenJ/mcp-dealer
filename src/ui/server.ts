@@ -8,7 +8,9 @@ import { contentType, lookup } from 'mime-types';
 interface StartOptions { configPath: string; port: number }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const FRONTEND_DIST = join(__dirname, 'frontend', 'dist');
+// __dirname is <root>/src/ui in dev (tsx) and <root>/dist/ui when built — both
+// two levels below the project root — so resolve the vite output the same way.
+const FRONTEND_DIST = join(__dirname, '..', '..', 'dist', 'ui', 'frontend', 'dist');
 
 function attachStatic(app: ReturnType<typeof createApp>): void {
   if (!existsSync(FRONTEND_DIST)) return;
