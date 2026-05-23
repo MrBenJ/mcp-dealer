@@ -7,10 +7,8 @@ const configPath = process.env.MCP_DEALER_CONFIG ?? join(homedir(), '.mcp-dealer
 
 async function main() {
   if (args[0] === 'ui') {
-    const portArgIdx = args.indexOf('--port');
-    const portFromArg = portArgIdx >= 0 ? Number(args[portArgIdx + 1]) : undefined;
-    const portFromEnv = process.env.MCP_DEALER_UI_PORT ? Number(process.env.MCP_DEALER_UI_PORT) : undefined;
-    const port = portFromArg ?? portFromEnv ?? 7411;
+    const { resolvePort } = await import('./resolve-port.js');
+    const port = resolvePort(args, process.env);
     const { startUi } = await import('../ui/server.js');
     startUi({ configPath, port });
     return;
